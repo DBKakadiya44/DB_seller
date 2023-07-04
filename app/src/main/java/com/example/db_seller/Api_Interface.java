@@ -13,6 +13,11 @@ public interface Api_Interface
 
     @FormUrlEncoded
     @POST("login.php")
-    Call<Model_Class> loginUser(@Field("email") String email,@Field("password") String password);
+    Call<LoginClass> loginUser(@Field("email") String email,@Field("password") String password);
+
+//    @FormUrlEncoded
+//    @POST("addProduct.php")
+//    Call<PModel> addproduct(@Field(""))
+
 
 }

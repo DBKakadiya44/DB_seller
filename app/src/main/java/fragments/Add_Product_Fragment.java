@@ -22,8 +22,10 @@ import com.example.db_seller.databinding.AddProductFragmentBinding;
 
 public class Add_Product_Fragment extends Fragment
 {
+    int sellerid,price,stock;
+    String name,category;
     ImageView imageView;
-    EditText name,stock,price,category;
+    EditText fname,fstock,fprice,fcategory;
 
     int SELECT_PICTURE = 200;
 
@@ -33,10 +35,10 @@ public class Add_Product_Fragment extends Fragment
        View view = LayoutInflater.from(getContext()).inflate(R.layout.add_product_fragment,container,false);
 
        imageView = view.findViewById(R.id.addimage);
-       name=view.findViewById(R.id.namefield);
-       stock=view.findViewById(R.id.stockfield);
-       price=view.findViewById(R.id.pricefield);
-       category=view.findViewById(R.id.categoryfield);
+       fname=view.findViewById(R.id.namefield);
+       fstock=view.findViewById(R.id.stockfield);
+       fprice=view.findViewById(R.id.pricefield);
+       fcategory=view.findViewById(R.id.categoryfield);
 
        imageView.setOnClickListener(new View.OnClickListener() {
            @Override

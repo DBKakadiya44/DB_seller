@@ -29,13 +29,16 @@ public class Login_Page extends AppCompatActivity {
         binding.signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Instence_class .Callapi().loginUser(binding.email.getText().toString(),binding.password.getText().toString()).enqueue(new Callback<Model_Class>() {
+                Instence_class .Callapi().loginUser(binding.email.getText().toString(),binding.password.getText().toString()).enqueue(new Callback<LoginClass>() {
                     @Override
-                    public void onResponse(Call<Model_Class> call, Response<Model_Class> response) {
+                    public void onResponse(Call<LoginClass> call, Response<LoginClass> response) {
                         if(response.body().getConnection()==1) {
                             if (response.body().getResult() == 1) {
                                 Intent intent = new Intent(Login_Page.this, Main_Page.class);
                                 editor.putInt("login",1);
+                                editor.putInt("sellerid", Integer.parseInt(response.body().getUserdata().getId()));
+                                editor.putString("sellername",response.body().getUserdata().getName());
+                                editor.putString("selleremail",response.body().getUserdata().getEmail());
                                 editor.commit();
                                 startActivity(intent);
                                 Toast.makeText(Login_Page.this, "Log In SuccessFully", Toast.LENGTH_LONG).show();
@@ -50,7 +53,7 @@ public class Login_Page extends AppCompatActivity {
                         }
                     }
                     @Override
-                    public void onFailure(Call<Model_Class> call, Throwable t) {
+                    public void onFailure(Call<LoginClass> call, Throwable t) {
                         Log.d("TTT", "onFailure: off = "+t.getLocalizedMessage());
                     }
                 });

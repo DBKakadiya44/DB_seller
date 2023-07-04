@@ -12,12 +12,14 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.security.PublicKey;
+
 public class Splash_Screen extends AppCompatActivity
 {
     ImageView imageView;
     Runnable runnable;
-    SharedPreferences preferences;
-    static SharedPreferences.Editor editor;
+    public static SharedPreferences preferences;
+    public static SharedPreferences.Editor editor;
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -30,24 +32,31 @@ public class Splash_Screen extends AppCompatActivity
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.splash_anim);
         imageView.setAnimation(animation);
 
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                int login = preferences.getInt("login",0);
-                if(login==1) {
+        int login = preferences.getInt("login", 0);
+
+        if(login==1) {
+            runnable = new Runnable() {
+                @Override
+                public void run() {
                     Intent intent = new Intent(Splash_Screen.this, Main_Page.class);
                     startActivity(intent);
                     finish();
-                }else
-                {
-                    Intent intent = new Intent(Splash_Screen.this, Login_Page.class);
+                }
+            };
+            Handler handler = new Handler();
+            handler.postDelayed(runnable, 1500);
+        }
+        if(login==0) {
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(Splash_Screen.this, Signup_Page.class);
                     startActivity(intent);
                     finish();
                 }
-            }
-        };
-        Handler handler = new Handler();
-        handler.postDelayed(runnable,2500);
-
+            };
+            Handler handler = new Handler();
+            handler.postDelayed(runnable, 1500);
+        }
     }
 }

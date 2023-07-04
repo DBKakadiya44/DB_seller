@@ -19,7 +19,7 @@ import retrofit2.Response;
 
 public class Signup_Page extends AppCompatActivity
 {
-    TextView signup;
+    TextView signup,logintext;
     EditText name,email,password;
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
@@ -29,6 +29,15 @@ public class Signup_Page extends AppCompatActivity
         name=findViewById(R.id.signupname);
         email=findViewById(R.id.signupemail);
         password=findViewById(R.id.signuppassword);
+        logintext=findViewById(R.id.logintext);
+
+        logintext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Signup_Page.this,Login_Page.class);
+                startActivity(intent);
+            }
+        });
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
