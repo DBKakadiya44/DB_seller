@@ -1,4 +1,4 @@
-package com.example.db_seller;
+package DataBase;
 
 public class Model_Class {
 

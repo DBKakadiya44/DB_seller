@@ -25,12 +25,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/signupname"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:layout_marginHorizontal="15dp"
                 android:background="@drawable/border"
-                android:textColorHint="@color/black"
+                android:textColorHint="@color/white"
                 android:layout_marginTop="50dp"
                 android:hint="Name"/>
 
@@ -47,8 +47,8 @@
                 android:id="@+id/signupemail"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:layout_marginHorizontal="15dp"
                 android:background="@drawable/border"
                 android:hint="E-mail"/>
@@ -64,11 +64,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/signuppassword"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:layout_marginHorizontal="15dp"
-                android:textColorHint="@color/black"
+                android:textColorHint="@color/white"
                 android:background="@drawable/border"
                 android:hint="Password"/>
 

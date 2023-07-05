@@ -9,10 +9,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-import android.window.SplashScreen;
 
 import com.example.db_seller.databinding.LoginPageBinding;
 
+import DataBase.Instence_class;
+import DataBase.LoginClass;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,7 +30,7 @@ public class Login_Page extends AppCompatActivity {
         binding.signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Instence_class .Callapi().loginUser(binding.email.getText().toString(),binding.password.getText().toString()).enqueue(new Callback<LoginClass>() {
+                Instence_class.Callapi().loginUser(binding.email.getText().toString(),binding.password.getText().toString()).enqueue(new Callback<LoginClass>() {
                     @Override
                     public void onResponse(Call<LoginClass> call, Response<LoginClass> response) {
                         if(response.body().getConnection()==1) {

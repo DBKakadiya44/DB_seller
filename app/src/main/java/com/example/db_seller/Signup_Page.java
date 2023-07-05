@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import DataBase.Instence_class;
+import DataBase.Model_Class;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

@@ -3,7 +3,6 @@ package fragments;
 import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,20 +11,29 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import DataBase.Instence_class;
+import DataBase.PModel;
 import com.example.db_seller.R;
-import com.example.db_seller.databinding.AddProductFragmentBinding;
+import com.example.db_seller.Splash_Screen;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Add_Product_Fragment extends Fragment
 {
-    int sellerid,price,stock;
-    String name,category;
+
     ImageView imageView;
     EditText fname,fstock,fprice,fcategory;
+    TextView submitbutton;
 
     int SELECT_PICTURE = 200;
 
@@ -39,6 +47,7 @@ public class Add_Product_Fragment extends Fragment
        fstock=view.findViewById(R.id.stockfield);
        fprice=view.findViewById(R.id.pricefield);
        fcategory=view.findViewById(R.id.categoryfield);
+       submitbutton = view.findViewById(R.id.submitbutton);
 
        imageView.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -47,11 +56,51 @@ public class Add_Product_Fragment extends Fragment
            }
        });
 
+        submitbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                addfragment(new Home_Fragment());
+                Instence_class.Callapi().addproduct(Splash_Screen.preferences.getInt("sellerid",0),fname.getText().toString(),fstock.getText(),fprice.getText(),fcategory.getText().toString()).enqueue(new Callback<PModel>() {
+                    @Override
+                    public void onResponse(Call<PModel> call, Response<PModel> response) {
+                        if(response.body().getConnection()==1)
+                        {
+                            if(response.body().getProductaddd()==1)
+                            {
+                                Toast.makeText(getContext(), "Product Add Sucessfully", Toast.LENGTH_LONG).show();
+                            }else
+                            {
+                                Toast.makeText(getContext(), "Failed to Add Product", Toast.LENGTH_LONG).show();
+                            }
+                        }else
+                        {
+                            Toast.makeText(getContext(), "Check Internet Connection", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<PModel> call, Throwable t) {
+
+                    }
+                });
+
+            }
+        });
+
         return view;
     }
 
+    private void addfragment(Fragment fragment)
+    {
+        FragmentManager fm = getParentFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.framlayout,fragment);
+        transaction.commit();
+    }
 
-        void imageChooser() {
+
+    void imageChooser() {
 
         // create an instance of the
         // intent of the type image

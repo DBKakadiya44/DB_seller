@@ -1,4 +1,4 @@
-package com.example.db_seller;
+package DataBase;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
