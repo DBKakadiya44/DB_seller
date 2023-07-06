@@ -19,10 +19,10 @@ public interface Api_Interface
 
     @FormUrlEncoded
     @POST("addProduct.php")
-    Call<PModel> addproduct(@Field("sellerid") int sellerid, @Field("name") String name, @Field("stock") Editable stock, @Field("price") Editable price, @Field("category") String category);
+    Call<PModel> addproduct(@Field("sellerid") int sellerid, @Field("name") String name, @Field("stock") Editable stock, @Field("price") Editable price, @Field("category") String category, @Field("productimage") String imagedata);
 
     @FormUrlEncoded
     @POST
-    Call<ViewProductClass> viewproduct(@Field("id") int id,@Field("sellerid") int sellerid,@Field("name") String name,@Field("stock") int stock,@Field("price") int price,@Field("category") String category);
+    Call<ViewProductClass> viewproduct(@Field("id") int id,@Field("sellerid") int sellerid,@Field("name") String name,@Field("stock") int stock,@Field("price") int price,@Field("category") String category,@Field("image") String image);
 
 }
