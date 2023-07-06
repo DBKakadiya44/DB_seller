@@ -3,7 +3,11 @@ package fragments;
 import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +27,10 @@ import DataBase.Instence_class;
 import DataBase.PModel;
 import com.example.db_seller.R;
 import com.example.db_seller.Splash_Screen;
+import com.theartofdev.edmodo.cropper.CropImage;
+
+import java.io.ByteArrayOutputStream;
+import java.util.Base64;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,8 +68,19 @@ public class Add_Product_Fragment extends Fragment
             @Override
             public void onClick(View v) {
 
+                Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                // In case you want to compress your image, here it's at 40%
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 40, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream.toByteArray();
+                String imagedata = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    imagedata = Base64.getEncoder().encodeToString(byteArray);
+                }
+
                 addfragment(new Home_Fragment());
-                Instence_class.Callapi().addproduct(Splash_Screen.preferences.getInt("sellerid",0),fname.getText().toString(),fstock.getText(),fprice.getText(),fcategory.getText().toString()).enqueue(new Callback<PModel>() {
+                Instence_class.Callapi().addproduct(Splash_Screen.preferences.getInt("sellerid",0),fname.getText().toString(),fstock.getText(),fprice.getText(),fcategory.getText().toString(),imagedata).enqueue(new Callback<PModel>() {
                     @Override
                     public void onResponse(Call<PModel> call, Response<PModel> response) {
                         if(response.body().getConnection()==1)
@@ -101,32 +120,51 @@ public class Add_Product_Fragment extends Fragment
 
 
     void imageChooser() {
+/////////////111111111111
+//        // create an instance of the
+//        // intent of the type image
+//        Intent i = new Intent();
+//        i.setType("image/*");
+//        i.setAction(Intent.ACTION_GET_CONTENT);
+//
+//        // pass the constant to compare it
+//        // with the returned requestCode
+//        startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
 
-        // create an instance of the
-        // intent of the type image
-        Intent i = new Intent();
-        i.setType("image/*");
-        i.setAction(Intent.ACTION_GET_CONTENT);
 
-        // pass the constant to compare it
-        // with the returned requestCode
-        startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
+        ////////////////22222
+
+        CropImage.activity()
+                .start(getContext(), this);
+
+
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
+//        if (resultCode == RESULT_OK) {
+//
+//            // compare the resultCode with the
+//            // SELECT_PICTURE constant
+//            if (requestCode == SELECT_PICTURE) {
+//                // Get the url of the image from data
+//                Uri selectedImageUri = data.getData();
+//                if (null != selectedImageUri) {
+//                    // update the preview image in the layout
+//                    imageView.setImageURI(selectedImageUri);
+//                }
+//            }
+//        }
 
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
-            if (requestCode == SELECT_PICTURE) {
-                // Get the url of the image from data
-                Uri selectedImageUri = data.getData();
-                if (null != selectedImageUri) {
-                    // update the preview image in the layout
-                    imageView.setImageURI(selectedImageUri);
-                }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                imageView.setImageURI(resultUri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
         }
+
     }
 }
