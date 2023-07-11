@@ -59,6 +59,8 @@ public class Main_Page extends AppCompatActivity
                     binding.drawerlayout.close();
                 }
                 if(item.getItemId()==R.id.addproduct){
+                    Splash_Screen.editor.putString("from","add");
+                    Splash_Screen.editor.commit();
                     addfragment(new Add_Product_Fragment());
                     binding.drawerlayout.close();
                 }

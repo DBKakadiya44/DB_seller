@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import DataBase.Instence_class;
+import DataBase.Model_Class;
 import DataBase.PModel;
 import com.example.db_seller.R;
 import com.example.db_seller.Splash_Screen;
@@ -80,30 +82,50 @@ public class Add_Product_Fragment extends Fragment
                 }
 
                 addfragment(new Home_Fragment());
-                Instence_class.Callapi().addproduct(Splash_Screen.preferences.getInt("sellerid",0),fname.getText().toString(),fstock.getText(),fprice.getText(),fcategory.getText().toString(),imagedata).enqueue(new Callback<PModel>() {
-                    @Override
-                    public void onResponse(Call<PModel> call, Response<PModel> response) {
-                        if(response.body().getConnection()==1)
-                        {
-                            if(response.body().getProductaddd()==1)
-                            {
-                                Toast.makeText(getContext(), "Product Add Sucessfully", Toast.LENGTH_LONG).show();
-                            }else
-                            {
-                                Toast.makeText(getContext(), "Failed to Add Product", Toast.LENGTH_LONG).show();
+
+                if(Splash_Screen.preferences.getString("from",null).equals("add")) {
+                    Instence_class.Callapi().addproduct(Splash_Screen.preferences.getInt("sellerid", 0), fname.getText().toString(), fstock.getText(), fprice.getText(), fcategory.getText().toString(), imagedata).enqueue(new Callback<PModel>() {
+                        @Override
+                        public void onResponse(Call<PModel> call, Response<PModel> response) {
+                            if (response.body().getConnection() == 1) {
+                                if (response.body().getProductaddd() == 1) {
+                                    //Toast.makeText(getContext(), "Product Add Sucessfully", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(getContext(), "Failed to Add Product", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Toast.makeText(getContext(), "Check Internet Connection", Toast.LENGTH_LONG).show();
                             }
-                        }else
-                        {
-                            Toast.makeText(getContext(), "Check Internet Connection", Toast.LENGTH_LONG).show();
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<PModel> call, Throwable t) {
+                        @Override
+                        public void onFailure(Call<PModel> call, Throwable t) {
 
-                    }
-                });
+                        }
+                    });
+                }
+                if(Splash_Screen.preferences.getString("from",null).equals("update")){
+                    Toast.makeText(getContext(), "Update pref", Toast.LENGTH_LONG).show();
 
+                    fname.setText(""+Splash_Screen.preferences.getString("pname",null));
+
+                    Instence_class.Callapi().updateproduct(getArguments().getString("pname",null),getArguments().getString("pprice",null),getArguments().getString("pstock",null),getArguments().getString("pcategory",null),getArguments().getString("pid",null)).enqueue(new Callback<Model_Class>() {
+                        @Override
+                        public void onResponse(Call<Model_Class> call, Response<Model_Class> response) {
+                            if(response.body().getConnection()==1){
+                                if(response.body().getResult()==1){
+                                    Log.d("RRR", "onResponse: update result = "+response.body().getResult());
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Model_Class> call, Throwable t) {
+
+                        }
+                    });
+
+                }
             }
         });
 
