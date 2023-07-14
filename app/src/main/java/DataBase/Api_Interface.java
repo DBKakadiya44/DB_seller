@@ -27,7 +27,7 @@ public interface Api_Interface
 
     @FormUrlEncoded
     @POST("updateproduct.php")
-    Call<Model_Class> updateproduct(@Field("name") String name, @Field("price") String price, @Field("stock") String stock, @Field("category") String category, @Field("id") String id);
+    Call<Model_Class> updateproduct(@Field("name") String name, @Field("price") String price, @Field("stock") String stock, @Field("category") String category,@Field("id") String id);
 
     @FormUrlEncoded
     @POST("deleteproduct.php")

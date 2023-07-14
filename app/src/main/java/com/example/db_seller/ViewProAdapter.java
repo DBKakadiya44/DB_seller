@@ -1,5 +1,7 @@
 package com.example.db_seller;
 
+import static com.example.db_seller.Splash_Screen.editor;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -61,7 +63,6 @@ public class ViewProAdapter extends RecyclerView.Adapter<ViewProAdapter.ProHolde
         holder.menuoption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Popup", Toast.LENGTH_LONG).show();
                 PopupMenu popupMenu = new PopupMenu(inventory_fragment.getContext(),v);
                 popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -69,30 +70,29 @@ public class ViewProAdapter extends RecyclerView.Adapter<ViewProAdapter.ProHolde
                     public boolean onMenuItemClick(MenuItem item) {
 
                         if(item.getItemId()==R.id.updatemenu){
-                            Add_Product_Fragment apf = new Add_Product_Fragment();
-                            Bundle args = new Bundle();
+                            editor.putString("from","update");
+                            editor.putString("pid",""+productdata.get(position).getId());
+                            editor.putString("pname",""+productdata.get(position).getName());
+                            editor.putString("pprice",""+productdata.get(position).getPrice());
+                            editor.putString("pstock",""+productdata.get(position).getStock());
+                            editor.putString("pcategory",""+productdata.get(position).getCategory());
+                            editor.putString("pimage",""+productdata.get(position).getImage());
+                            editor.commit();
 
-                            Splash_Screen.editor.putString("from","update");
-                            Splash_Screen.editor.commit();
-
-                            Splash_Screen.editor.putString("pid",""+productdata.get(position).getId());
-                            Splash_Screen.editor.putString("pname",""+productdata.get(position).getName());
-                            Splash_Screen.editor.putString("pprice",""+productdata.get(position).getPrice());
-                            Splash_Screen.editor.putString("pstock",""+productdata.get(position).getStock());
-                            Splash_Screen.editor.putString("pcategory",""+productdata.get(position).getCategory());
-                            Splash_Screen.editor.putString("pimage",""+productdata.get(position).getImage());
-
-                            apf.setArguments(args);
                             addfragment(new Add_Product_Fragment());
                         }
                         if(item.getItemId()==R.id.deletemenu){
 
-                            Instence_class.Callapi().deleteproduct(Splash_Screen.preferences.getInt("pid",0)).enqueue(new Callback<Model_Class>() {
+                            Instence_class.Callapi().deleteproduct(Integer.parseInt(productdata.get(position).getId())).enqueue(new Callback<Model_Class>() {
                                 @Override
                                 public void onResponse(Call<Model_Class> call, Response<Model_Class> response) {
                                     if(response.body().getConnection()==1){
                                         if(response.body().getResult()==1){
                                             Toast.makeText(inventory_fragment.getContext(), "Product Delete", Toast.LENGTH_LONG).show();
+                                            productdata.remove(position);
+                                            notifyDataSetChanged();
+                                            notifyDataSetChanged();
+
                                         }else
                                         {
                                             Toast.makeText(inventory_fragment.getContext(), "Delete Fail", Toast.LENGTH_LONG).show();

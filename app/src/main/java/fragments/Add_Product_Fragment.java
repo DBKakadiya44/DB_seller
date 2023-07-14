@@ -2,6 +2,9 @@ package fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.example.db_seller.Splash_Screen.*;
+
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,12 +24,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import DataBase.Instence_class;
 import DataBase.Model_Class;
 import DataBase.PModel;
+
+import com.bumptech.glide.Glide;
 import com.example.db_seller.R;
 import com.example.db_seller.Splash_Screen;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -45,6 +51,7 @@ public class Add_Product_Fragment extends Fragment
     EditText fname,fstock,fprice,fcategory;
     TextView submitbutton;
 
+
     int SELECT_PICTURE = 200;
 
     @Nullable
@@ -52,19 +59,31 @@ public class Add_Product_Fragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
        View view = LayoutInflater.from(getContext()).inflate(R.layout.add_product_fragment,container,false);
 
-       imageView = view.findViewById(R.id.addimage);
-       fname=view.findViewById(R.id.namefield);
-       fstock=view.findViewById(R.id.stockfield);
-       fprice=view.findViewById(R.id.pricefield);
-       fcategory=view.findViewById(R.id.categoryfield);
-       submitbutton = view.findViewById(R.id.submitbutton);
+        imageView = view.findViewById(R.id.addimage);
+        fname=view.findViewById(R.id.namefield);
+        fstock=view.findViewById(R.id.stockfield);
+        fprice=view.findViewById(R.id.pricefield);
+        fcategory=view.findViewById(R.id.categoryfield);
+        submitbutton = view.findViewById(R.id.submitbutton);
 
-       imageView.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               imageChooser();
-           }
-       });
+        String from = preferences.getString("from",null);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageChooser();
+            }
+        });
+
+        if(from.equals("update")){
+
+            Toast.makeText(getContext(), "Update pref", Toast.LENGTH_LONG).show();
+
+            Glide.with(Add_Product_Fragment.this).load("https://dipkakadiya.000webhostapp.com/MySite/"+preferences.getString("pimage",null)).into(imageView);
+            fname.setText(preferences.getString("pname",null));
+            fstock.setText(preferences.getString("pstock",null));
+            fprice.setText(preferences.getString("pprice",null));
+            fcategory.setText(preferences.getString("pcategory",null));
+        }
 
         submitbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,13 +102,13 @@ public class Add_Product_Fragment extends Fragment
 
                 addfragment(new Home_Fragment());
 
-                if(Splash_Screen.preferences.getString("from",null).equals("add")) {
-                    Instence_class.Callapi().addproduct(Splash_Screen.preferences.getInt("sellerid", 0), fname.getText().toString(), fstock.getText(), fprice.getText(), fcategory.getText().toString(), imagedata).enqueue(new Callback<PModel>() {
+                if(from.equals("add")) {
+                    Instence_class.Callapi().addproduct(preferences.getInt("sellerid", 0), fname.getText().toString(), fstock.getText(), fprice.getText(), fcategory.getText().toString(), imagedata).enqueue(new Callback<PModel>() {
                         @Override
                         public void onResponse(Call<PModel> call, Response<PModel> response) {
                             if (response.body().getConnection() == 1) {
-                                if (response.body().getProductaddd() == 1) {
-                                    //Toast.makeText(getContext(), "Product Add Sucessfully", Toast.LENGTH_LONG).show();
+                                if (response.body().getResult() == 1) {
+                                    //Toast.makeText(getActivity(), "Product Add Sucessfully", Toast.LENGTH_LONG).show();
                                 } else {
                                     Toast.makeText(getContext(), "Failed to Add Product", Toast.LENGTH_LONG).show();
                                 }
@@ -97,35 +116,38 @@ public class Add_Product_Fragment extends Fragment
                                 Toast.makeText(getContext(), "Check Internet Connection", Toast.LENGTH_LONG).show();
                             }
                         }
-
                         @Override
                         public void onFailure(Call<PModel> call, Throwable t) {
 
                         }
                     });
                 }
-                if(Splash_Screen.preferences.getString("from",null).equals("update")){
-                    Toast.makeText(getContext(), "Update pref", Toast.LENGTH_LONG).show();
+                if(from.equals("update")){
 
-                    fname.setText(""+Splash_Screen.preferences.getString("pname",null));
+                    Glide.with(Add_Product_Fragment.this).load("https://dipkakadiya.000webhostapp.com/MySite/"+preferences.getString("pimage",null)).into(imageView);
+                    fname.setText(preferences.getString("pname",null));
+                    fstock.setText(preferences.getString("pstock",null));
+                    fprice.setText(preferences.getString("pprice",null));
+                    fcategory.setText(preferences.getString("pcategory",null));
 
-                    Instence_class.Callapi().updateproduct(getArguments().getString("pname",null),getArguments().getString("pprice",null),getArguments().getString("pstock",null),getArguments().getString("pcategory",null),getArguments().getString("pid",null)).enqueue(new Callback<Model_Class>() {
-                        @Override
-                        public void onResponse(Call<Model_Class> call, Response<Model_Class> response) {
-                            if(response.body().getConnection()==1){
-                                if(response.body().getResult()==1){
-                                    Log.d("RRR", "onResponse: update result = "+response.body().getResult());
+                            Instence_class.Callapi().updateproduct(preferences.getString("pname",null), preferences.getString("pprice",null), preferences.getString("pstock",null), preferences.getString("pcategory",null),preferences.getString("pid",null)).enqueue(new Callback<Model_Class>() {
+                                @Override
+                                public void onResponse(Call<Model_Class> call, Response<Model_Class> response) {
+                                    if(response.body().getConnection()==1){
+                                        if(response.body().getResult()==1){
+                                            Log.d("RRR", "onResponse: update result = "+response.body().getResult());
+                                            Toast.makeText(getContext(), "Update pref", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
                                 }
-                            }
-                        }
 
-                        @Override
-                        public void onFailure(Call<Model_Class> call, Throwable t) {
+                                @Override
+                                public void onFailure(Call<Model_Class> call, Throwable t) {
 
-                        }
-                    });
-
+                                }
+                            });
                 }
+
             }
         });
 

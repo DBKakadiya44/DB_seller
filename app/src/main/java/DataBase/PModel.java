@@ -12,7 +12,7 @@ public class PModel {
     private Integer connection;
     @SerializedName("productaddd")
     @Expose
-    private Integer productaddd;
+    private Integer result;
 
     public Integer getConnection() {
         return connection;
@@ -22,19 +22,19 @@ public class PModel {
         this.connection = connection;
     }
 
-    public Integer getProductaddd() {
-        return productaddd;
+    public Integer getResult() {
+        return result;
     }
 
-    public void setProductaddd(Integer productaddd) {
-        this.productaddd = productaddd;
+    public void setResult(Integer result) {
+        this.result = result;
     }
 
     @Override
     public String toString() {
         return "PModel{" +
                 "connection=" + connection +
-                ", productaddd=" + productaddd +
+                ", productaddd=" + result +
                 '}';
     }
 }
