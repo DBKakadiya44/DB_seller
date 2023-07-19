@@ -75,9 +75,6 @@ public class Add_Product_Fragment extends Fragment
         });
 
         if(from.equals("update")){
-
-            Toast.makeText(getContext(), "Update pref", Toast.LENGTH_LONG).show();
-
             Glide.with(Add_Product_Fragment.this).load("https://dipkakadiya.000webhostapp.com/MySite/"+preferences.getString("pimage",null)).into(imageView);
             fname.setText(preferences.getString("pname",null));
             fstock.setText(preferences.getString("pstock",null));
@@ -124,19 +121,17 @@ public class Add_Product_Fragment extends Fragment
                 }
                 if(from.equals("update")){
 
-                    Glide.with(Add_Product_Fragment.this).load("https://dipkakadiya.000webhostapp.com/MySite/"+preferences.getString("pimage",null)).into(imageView);
-                    fname.setText(preferences.getString("pname",null));
-                    fstock.setText(preferences.getString("pstock",null));
-                    fprice.setText(preferences.getString("pprice",null));
-                    fcategory.setText(preferences.getString("pcategory",null));
+//                    Glide.with(Add_Product_Fragment.this).load("https://dipkakadiya.000webhostapp.com/MySite/"+preferences.getString("pimage",null)).into(imageView);
+//                    fname.setText(preferences.getString("pname",null));
+//                    fstock.setText(preferences.getString("pstock",null));
+//                    fprice.setText(preferences.getString("pprice",null));
+//                    fcategory.setText(preferences.getString("pcategory",null));
 
-                            Instence_class.Callapi().updateproduct(preferences.getString("pname",null), preferences.getString("pprice",null), preferences.getString("pstock",null), preferences.getString("pcategory",null),preferences.getString("pid",null)).enqueue(new Callback<Model_Class>() {
+                            Instence_class.Callapi().updateproduct(fname.getText().toString(),fprice.getText().toString(),fstock.getText().toString(),fcategory.getText().toString(),imagedata,preferences.getString("pid",null)).enqueue(new Callback<Model_Class>() {
                                 @Override
                                 public void onResponse(Call<Model_Class> call, Response<Model_Class> response) {
                                     if(response.body().getConnection()==1){
                                         if(response.body().getResult()==1){
-                                            Log.d("RRR", "onResponse: update result = "+response.body().getResult());
-                                            Toast.makeText(getContext(), "Update pref", Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 }

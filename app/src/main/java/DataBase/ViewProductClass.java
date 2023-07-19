@@ -43,4 +43,12 @@ public class ViewProductClass {
         this.productdata = productdata;
     }
 
+    @Override
+    public String toString() {
+        return "ViewProductClass{" +
+                "connection=" + connection +
+                ", result=" + result +
+                ", productdata=" + productdata +
+                '}';
+    }
 }

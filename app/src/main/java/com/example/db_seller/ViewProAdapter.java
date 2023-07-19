@@ -71,6 +71,7 @@ public class ViewProAdapter extends RecyclerView.Adapter<ViewProAdapter.ProHolde
 
                         if(item.getItemId()==R.id.updatemenu){
                             editor.putString("from","update");
+                            editor.commit();
                             editor.putString("pid",""+productdata.get(position).getId());
                             editor.putString("pname",""+productdata.get(position).getName());
                             editor.putString("pprice",""+productdata.get(position).getPrice());
@@ -140,6 +141,16 @@ public class ViewProAdapter extends RecyclerView.Adapter<ViewProAdapter.ProHolde
             price=itemView.findViewById(R.id.in_re_price);
             category=itemView.findViewById(R.id.in_re_category);
             menuoption=itemView.findViewById(R.id.menuoption);
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Intent intent = new Intent(inventory_fragment.getContext(),PaymentActivity.class);
+                    inventory_fragment.startActivity(intent);
+
+                    return true;
+                }
+            });
         }
 
     }

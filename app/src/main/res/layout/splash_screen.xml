@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#050E3E"
+    android:background="#C9D0F4"
     android:gravity="center">
 
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/splashimg"
-        android:src="@drawable/db_seller"
-        />
+<!--    <ImageView-->
+<!--        android:layout_width="150dp"-->
+<!--        android:layout_height="150dp"-->
+<!--        android:id="@+id/splashimg"-->
+<!--        android:src="@drawable/db_seller"-->
+<!--        />-->
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_rawRes="@raw/animation_lk6dt0o3"
+        app:lottie_repeatMode="reverse"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true">
+
+    </com.airbnb.lottie.LottieAnimationView>
 
 </LinearLayout>
